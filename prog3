@@ -1,0 +1,31 @@
+#include <Servo.h>
+
+Servo myservo;  // Create a servo object
+int potPin = A0; // Analog pin for potentiometer
+int potValue;   // Variable to store potentiometer value
+
+void setup() {
+  myservo.attach(9); // Attach the servo to pin 9
+  
+  // Initialize Serial communication
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read the potentiometer value (0-1023)
+  potValue = analogRead(potPin);
+  
+  // Map the potentiometer value to servo angle (0-180)
+  int servoAngle = map(potValue, 0, 1023, 0, 180);
+  
+  // Move the servo to the calculated angle
+  myservo.write(servoAngle);
+  
+  // Print potentiometer value and servo angle to Serial Monitor
+  Serial.print("Potentiometer Value: ");
+  Serial.print(potValue);
+  Serial.print("\t Servo Angle: ");
+  Serial.println(servoAngle);
+  
+  delay(15); // Add a small delay for smoother motion
+}
