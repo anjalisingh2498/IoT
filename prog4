@@ -1,0 +1,41 @@
+import serial
+import time
+
+# Define the serial port and baud rate
+ser = serial.Serial('/dev/ttyS0', 9600)
+
+def send_command(command):
+    ser.write(command.encode())
+
+try:
+    while True:
+        print("Menu:")
+        print("1. LED On/Off")
+        print("2. Get Ultrasonic Distance")
+        choice = input("Enter your choice (1/2): ")
+
+        if choice == '1':
+            led_choice = input("Enter LED state (1 for on, 0 for off): ")
+            send_command(led_choice)
+
+            response = ser.readline().decode().strip()
+            if response == '1':
+                print("LED turned ON")
+            elif response == '0':
+                print("LED turned OFF")
+            else:
+                print("Invalid response from Arduino")
+
+        elif choice == '2':
+            send_command('2')
+
+            distance = ser.readline().decode().strip()
+            print(f"Ultrasonic Distance: {distance} cm")
+
+        else:
+            print("Invalid choice. Please select 1 or 2.")
+
+except KeyboardInterrupt:
+    print("Exiting...")
+finally:
+    ser.close()
